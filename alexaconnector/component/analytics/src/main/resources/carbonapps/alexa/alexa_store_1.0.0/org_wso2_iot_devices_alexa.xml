@@ -18,11 +18,11 @@
   -->
 
 <EventStoreConfiguration>
-    <Source>
-        <StreamId>org.wso2.iot.devices.alexa:1.0.0</StreamId>
-    </Source>
-    <RecordStoreName>EVENT_STORE</RecordStoreName>
-    <TableSchema>
+	<Source>
+		<StreamId>org.wso2.iot.devices.alexa:1.0.0</StreamId>
+	</Source>
+	<RecordStoreName>EVENT_STORE</RecordStoreName>
+	<TableSchema>
 		<ColumnDefinition>
 			<Name>meta_owner</Name>
 			<EnableIndexing>true</EnableIndexing>
@@ -52,11 +52,18 @@
 			<Type>LONG</Type>
 		</ColumnDefinition>
 		<ColumnDefinition>
-			<Name>alexa</Name>
+			<Name>alexacommand</Name>
 			<EnableIndexing>false</EnableIndexing>
 			<IsPrimaryKey>false</IsPrimaryKey>
 			<EnableScoreParam>false</EnableScoreParam>
-			<Type>FLOAT</Type>
+			<Type>STRING</Type>
 		</ColumnDefinition>
-    </TableSchema>
+		<ColumnDefinition>
+			<Name>state</Name>
+			<EnableIndexing>false</EnableIndexing>
+			<IsPrimaryKey>false</IsPrimaryKey>
+			<EnableScoreParam>false</EnableScoreParam>
+			<Type>STRING</Type>
+		</ColumnDefinition>
+	</TableSchema>
 </EventStoreConfiguration>

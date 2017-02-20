@@ -18,7 +18,7 @@
   -->
 <eventReceiver name="alexa-mqtt" statistics="disable" trace="disable" xmlns="http://wso2.org/carbon/eventreceiver">
     <from eventAdapterType="oauth-mqtt">
-        <property name="topic">carbon.super/alexaconnector/+/alexacommandsq1</property>
+        <property name="topic">carbon.super/alexaconnector/+/alexacommands</property>
 		<property name="username">admin</property>
 		<property name="password">admin</property>
 		<property name="contentValidator">org.wso2.carbon.device.mgt.input.adapter.mqtt.util.MQTTContentValidator</property>

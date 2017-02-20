@@ -57,11 +57,9 @@ MQTT_EP = configParser.get('Device-Configurations', 'mqtt-ep')
 # XMPP_EP = configParser.get('Device-Configurations', 'xmpp-ep')
 AUTH_TOKEN = configParser.get('Device-Configurations', 'auth-token')
 CONTROLLER_CONTEXT = configParser.get('Device-Configurations', 'controller-context')
-DEVICE_INFO = '{{"event":{{"metaData":{{"owner":"' + DEVICE_OWNER + '","type":"raspberrypi","deviceId":"' + DEVICE_ID + '","time":{}}},"payloadData":{{"calls":{}}}}}}}'
-BRAIN_WAVE_INFO = '{{"event":{{"metaData":{{"owner":"' + DEVICE_OWNER + '","type":"raspberrypi","deviceId":"' + DEVICE_ID \
-                  + '","time":{}}},"payloadData":{{"poorSignalLevel":{:.0f},"meditationLevel":{:.0f},"attentionLevel":{:.0f}, ' \
-                    '"EEGPowersDelta":{:.0f},"EEGPowersTheta":{:.0f},"EEGPowersLowAlpha":{:.0f},' \
-                    '"EEGPowersHighAlpha":{:.0f}, "EEGPowersLowBeta":{:.0f}, "EEGPowersHighBeta":{:.0f}, "EEGPowersLowGamma":{:.0f}, , "EEGPowersMidGamma":{:.0f}}}}}}}'
+# DEVICE_INFO = '{{"event":{{"metaData":{{"owner":"' + DEVICE_OWNER + '","type":"raspberrypi","deviceId":"' + DEVICE_ID + '","time":{}}},"payloadData":{{"temperature":{}}}}}}}'
+
+DEVICE_INFO = '{{"event":{{"metaData":{{"owner":"' + DEVICE_OWNER + '","deviceType":"raspberrypi","deviceId":"' + DEVICE_ID + '","time":{}}},"payloadData":{{"alexacommand":{},"state":{}}}}}}}'
 HTTPS_EP = configParser.get('Device-Configurations', 'https-ep')
 # HTTP_EP = configParser.get('Device-Configurations', 'http-ep')
 # APIM_EP = configParser.get('Device-Configurations', 'apim-ep')

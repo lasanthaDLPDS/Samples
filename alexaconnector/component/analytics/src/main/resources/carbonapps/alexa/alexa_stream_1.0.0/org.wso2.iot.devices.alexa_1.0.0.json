@@ -4,15 +4,32 @@
   "nickName": "alexa",
   "description": "alexa data received from the Device",
   "metaData": [
-    {"name":"owner","type":"STRING"},
-    {"name":"deviceType","type":"STRING"},
-    {"name":"deviceId","type":"STRING"},
-    {"name":"time","type":"LONG"}
+    {
+      "name": "owner",
+      "type": "STRING"
+    },
+    {
+      "name": "deviceType",
+      "type": "STRING"
+    },
+    {
+      "name": "deviceId",
+      "type": "STRING"
+    },
+    {
+      "name": "time",
+      "type": "LONG"
+    }
   ],
   "payloadData": [
-      {
-        "name": "alexacommands","type": "INTEGER"
-      }
+    {
+      "name": "alexacommand",
+      "type": "STRING"
+    },
+    {
+      "name": "state",
+      "type": "STRING"
+    }
   ]
 }
 	

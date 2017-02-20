@@ -4,7 +4,7 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-SymbolicName: org.wso2.carbon.device.alexaconnector.plugin
 Built-By: lasantha
 Bundle-ManifestVersion: 2
-Bnd-LastModified: 1487556731290
+Bnd-LastModified: 1487626617534
 Bundle-DocURL: http://www.wso2.org/
 Bundle-Vendor: WSO2
 Import-Package: javax.naming;resolution:=optional,javax.sql;resolution

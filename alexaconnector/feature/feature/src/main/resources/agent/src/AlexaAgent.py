@@ -29,12 +29,12 @@ import time
 import running_mode
 
 import fauxmo
-from src.debounce_handler import debounce_handler
+from debounce_handler import debounce_handler
 
 import ssl
 from functools import wraps
 
-alexaCalls = {'light on': 0, 'light off': 0, 'buzzer on': 0, 'buzzer off': 0}
+# alexaCalls = {'light on': 0, 'light off': 0, 'buzzer on': 0, 'buzzer off': 0}
 
 iotUtils = __import__('iotUtils')
 mqttConnector = __import__('mqttConnector')
@@ -128,10 +128,9 @@ def configureLogger(loggerName):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #       This method connects to the Device-Cloud and pushes data
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def connectAndPushData():
+def connectAndPushData(command, state):
     currentTime = calendar.timegm(time.gmtime())
-    rPiTemperature = iotUtils.LAST_TEMP  # Push the last read temperature value
-    PUSH_DATA = iotUtils.DEVICE_INFO.format(currentTime, rPiTemperature)
+    PUSH_DATA = iotUtils.DEVICE_INFO.format(currentTime, command, state)
 
     print '~~~~~~~~~~~~~~~~~~~~~~~~ Publishing Device-Data ~~~~~~~~~~~~~~~~~~~~~~~~~'
     print ('PUBLISHED DATA: ' + PUSH_DATA)
@@ -141,49 +140,42 @@ def connectAndPushData():
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #       This is a Thread object for reading temperature continuously
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class CommandReaderThread(object):
-    def __init__(self):
-        if running_mode.RUNNING_MODE == 'N':
-            self.interval = iotUtils.COMMANDS_READING_INTERVAL_REAL_MODE
-        else:
-            self.interval = iotUtils.COMMANDS_READING_INTERVAL_VIRTUAL_MODE
-        thread = threading.Thread(target=self.run, args=())
-        thread.daemon = True  # Daemonize thread
-        thread.start()  # Start the execution
-
-    def run(self):
-
-        # Try to grab a sensor reading.  Use the read_retry method which will retry up
-        # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
-        light_on = None
-        light_off = None
-        buzzer_on = None
-        buzzer_off = None
-        while True:
-            try:
-                if running_mode.RUNNING_MODE == 'N':
-                    light_on = alexaCalls['light on']
-                    light_off = alexaCalls['light off']
-                    buzzer_on = alexaCalls['buzzer on']
-                    buzzer_off = alexaCalls['buzzer off']
-                else:
-                    light_on, light_off, buzzer_on, buzzer_off  = iotUtils.generateRandomTemperatureAndHumidityValues(4)
-
-# this part shoild be correct
-                if light_on != iotUtils.LAST_TEMP:
-                    time.sleep(PUSH_INTERVAL)
-                    iotUtils.LAST_TEMP = light_on
-                    connectAndPushData()
-
-                iotUtils.LAST_TEMP = light_on
-                # print 'RASPBERRY_STATS: Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity)
-
-            except Exception, e:
-                print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-                print "RASPBERRY_STATS: Exception in TempReaderThread: Could not successfully read Temperature"
-                print ("RASPBERRY_STATS: " + str(e))
-                pass
-                time.sleep(self.interval)
+# class CommandReaderThread(object):
+#     def __init__(self):
+#         if running_mode.RUNNING_MODE == 'N':
+#             self.interval = iotUtils.COMMANDS_READING_INTERVAL_REAL_MODE
+#         else:
+#             self.interval = iotUtils.COMMANDS_READING_INTERVAL_VIRTUAL_MODE
+#         thread = threading.Thread(target=self.run, args=())
+#         thread.daemon = True  # Daemonize thread
+#         thread.start()  # Start the execution
+#
+#     def run(self):
+#
+#         # Try to grab a sensor reading.  Use the read_retry method which will retry up
+#         # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
+#         while True:
+#             try:
+#                 if running_mode.RUNNING_MODE == 'N':
+#
+#                 else:
+#                     light_on, light_off, buzzer_on, buzzer_off  = iotUtils.generateRandomTemperatureAndHumidityValues(4)
+#
+#                 # this part shoild be correct
+#                 if light_on != iotUtils.LAST_TEMP:
+#                     time.sleep(PUSH_INTERVAL)
+#                     iotUtils.LAST_TEMP = light_on
+#                     connectAndPushData()
+#
+#                 iotUtils.LAST_TEMP = light_on
+#                 # print 'RASPBERRY_STATS: Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity)
+#
+#             except Exception, e:
+#                 print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+#                 print "RASPBERRY_STATS: Exception in TempReaderThread: Could not successfully read Temperature"
+#                 print ("RASPBERRY_STATS: " + str(e))
+#                 pass
+#                 time.sleep(self.interval)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #       This is a Thread object for listening for MQTT Messages
@@ -227,60 +219,73 @@ signal.signal(signal.SIGTERM, sigterm_handler)
 
 logging.basicConfig(level=logging.DEBUG)
 
+
 class device_handler(debounce_handler):
     """Publishes the on/off state requested,
        and the IP address of the Echo making the request.
     """
     TRIGGERS = [{"light": 52000}, {"buzzer": 52001}]
 
-
-
-    # def sslwrap(func):
-    #     @wraps(func)
-    #     def bar(*args, **kw):
-    #         kw['ssl_version'] = ssl.PROTOCOL_TLSv1
-    #         return func(*args, **kw)
-    #     return bar
-
     def act(self, client_address, state, name):
-
+        devices = ["BULB", "BUZZER"]
+        commands = ["ON", "OFF"]
+        msg = None
         try:
 
             if state == True and name == "light":
-                #MQTT msg send to broker
-                mqttConnector.publish(mqttConnector.TOPIC_TO_PUBLISH,"BULB:ON")
-                alexaCalls['light on'] += 1
-                logging.info("Light turned on successfully")
+                msg = devices[0]+":"+commands[0]
 
             elif state == True and name == "buzzer":
-                # MQTT msg send to broker
-                mqttConnector.publish(mqttConnector.TOPIC_TO_PUBLISH,"BUZZER:ON")
-                alexaCalls['buzzer on'] += 1
-                logging.info("BUZZER turned on successfully")
+                msg = devices[1] + ":" + commands[0]
 
             elif state == False and name == "light":
-                # MQTT msg send to broker
-                mqttConnector.publish(mqttConnector.TOPIC_TO_PUBLISH,"BULB:OFF")
-                alexaCalls['light off'] += 1
-                logging.info("Light turned off successfully")
+                msg = devices[0] + ":" + commands[1]
 
             elif state == False and name == "buzzer":
-                # MQTT msg send to broker
-                mqttConnector.publish(mqttConnector.TOPIC_TO_PUBLISH,"BUZZER:OFF")
-                alexaCalls['buzzer off'] += 1
-                logging.info("BUUZZER turned on successfully")
+                msg = devices[1] + ":" + commands[1]
+
+            if msg == None:
+                logging.error("Invalid message")
+            else:
+
+                mqttConnector.publish(mqttConnector.TOPIC_TO_PUBLISH_BRAIN_WAVE_INFO, msg)
+                connectAndPushData(msg.split(":")[0], msg.split(":")[1])
+                msg = None
 
             return True
         except Exception, e:
             logging.critical("Critical exception: " + str(e))
 
 
-def test():
-    while True:
-        mqttConnector.publish(mqttConnector.TOPIC_TO_PUBLISH, "BULB:ON")
-        alexaCalls['light on'] += 1
-        print alexaCalls['light on']
-        time.sleep(0.7)
+def test(state, name):
+    devices = ["BULB", "BUZZER"]
+    commands = ["ON", "OFF"]
+    msg = None
+    try:
+
+        if state == True and name == "light":
+            msg = devices[0] + ":" + commands[0]
+
+        elif state == True and name == "buzzer":
+            msg = devices[1] + ":" + commands[0]
+
+        elif state == False and name == "light":
+            msg = devices[0] + ":" + commands[1]
+
+        elif state == False and name == "buzzer":
+            msg = devices[1] + ":" + commands[1]
+
+        if msg == None:
+            logging.error("Invalid message")
+        else:
+
+            mqttConnector.publish(mqttConnector.TOPIC_TO_PUBLISH_BRAIN_WAVE_INFO, msg)
+            connectAndPushData(msg.split(":")[0], msg.split(":")[1])
+            msg = None
+
+        return True
+    except Exception, e:
+        logging.critical("Critical exception: " + str(e))
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #       The Main method of the RPi Agent
@@ -290,7 +295,7 @@ def main():
     configureLogger("WSO2IOT_RPiStats")
     UtilsThread()
     SubscribeToMQTTQueue()  # connects and subscribes to an MQTT Queue that receives MQTT commands from the server
-    CommandReaderThread()
+    # CommandReaderThread()
 
     # Startup the fauxmo server
     fauxmo.DEBUG = True
@@ -308,7 +313,17 @@ def main():
 
     # Loop and poll for incoming Echo requests
     logging.debug("Entering fauxmo polling loop")
-    test()
+    while True:
+
+        test(True,"light")
+        time.sleep(0.8)
+        test(False, "light")
+        time.sleep(0.9)
+        test(True, "buzzer")
+        time.sleep(0.8)
+
+        test(False, "buzzer")
+        time.sleep(0.8)
     # while True:
     #     try:
     #         # Allow time for a ctrl-c to stop the process

@@ -68,7 +68,7 @@ def publish(topic , msg):
 
     print "Publish triggered...."
     mqttClient.publish(topic, msg)
-    print "published to topic " + str(msg) + str(TOPIC_TO_PUBLISH_BRAIN_WAVE_INFO)
+    print "published to topic " + str(msg) + str(topic)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #       The Main method of the server script
@@ -83,7 +83,7 @@ def main():
     DEV_ID = iotUtils.DEVICE_ID
 
     global TOPIC_TO_PUBLISH
-    TOPIC_TO_PUBLISH = SERVER_NAME + "/raspberrypi/" + DEV_ID + "/alexacommands"
+    TOPIC_TO_PUBLISH = SERVER_NAME + "/alexaconnector/" + DEV_ID + "/alexacommands"
 
 
     global TOPIC_TO_PUBLISH_BRAIN_WAVE_INFO

@@ -177,24 +177,18 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
         String toDate = String.valueOf(to);
         String query = "meta_deviceId:" + deviceId + " AND meta_deviceType:" +
                 DeviceTypeConstants.DEVICE_TYPE + " AND meta_time : [" + fromDate + " TO " + toDate + "]";
-        String sensorTableName = null;
-        if(sensorType.equals(DeviceTypeConstants.SENSOR_TYPE1)){
-            sensorTableName = DeviceTypeConstants.SENSOR_TYPE1_EVENT_TABLE;
-        }else if(sensorType.equals(DeviceTypeConstants.SENSOR_TYPE2)){
-            sensorTableName = DeviceTypeConstants.SENSOR_TYPE2_EVENT_TABLE;
-        }
+        String sensorTableName = DeviceTypeConstants.SENSOR_TYPE1_EVENT_TABLE;
+
         try {
             if (!APIUtil.getDeviceAccessAuthorizationService().isUserAuthorized(new DeviceIdentifier(deviceId,
                     DeviceTypeConstants.DEVICE_TYPE))) {
                 return Response.status(Response.Status.UNAUTHORIZED.getStatusCode()).build();
             }
-            if (sensorTableName != null) {
-                List<SortByField> sortByFields = new ArrayList<>();
-                SortByField sortByField = new SortByField("meta_time", SortType.ASC);
-                sortByFields.add(sortByField);
-                List<SensorRecord> sensorRecords = APIUtil.getAllEventsForDevice(sensorTableName, query, sortByFields);
-                return Response.status(Response.Status.OK.getStatusCode()).entity(sensorRecords).build();
-            }
+            List<SortByField> sortByFields = new ArrayList<>();
+            SortByField sortByField = new SortByField("meta_time", SortType.ASC);
+            sortByFields.add(sortByField);
+            List<SensorRecord> sensorRecords = APIUtil.getAllEventsForDevice(sensorTableName, query, sortByFields);
+            return Response.status(Response.Status.OK.getStatusCode()).entity(sensorRecords).build();
         } catch (AnalyticsException e) {
             String errorMsg = "Error on retrieving stats on table " + sensorTableName + " with query " + query;
             log.error(errorMsg);
@@ -203,7 +197,6 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
             log.error(e.getErrorMessage(), e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
-        return Response.status(Response.Status.BAD_REQUEST).build();
     }
 
     /**
