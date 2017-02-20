@@ -1,0 +1,11 @@
+
+{
+  "deviceType": {
+    "label": "alexaconnector",
+    "category": "virtual",
+    "downloadAgentUri": "alexaconnector/device/download",
+    "scopes" : [
+      "perm:alexaconnector:enroll"
+    ]
+  }
+}

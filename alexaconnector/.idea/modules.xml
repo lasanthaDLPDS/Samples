@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/alexaconnector.iml" filepath="$PROJECT_DIR$/alexaconnector.iml" />
+      <module fileurl="file://$PROJECT_DIR$/component/alexaconnector-component.iml" filepath="$PROJECT_DIR$/component/alexaconnector-component.iml" />
+      <module fileurl="file://$PROJECT_DIR$/feature/alexaconnector-feature.iml" filepath="$PROJECT_DIR$/feature/alexaconnector-feature.iml" />
+      <module fileurl="file://$PROJECT_DIR$/component/analytics/org.wso2.carbon.device.alexaconnector.analytics.iml" filepath="$PROJECT_DIR$/component/analytics/org.wso2.carbon.device.alexaconnector.analytics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/component/api/org.wso2.carbon.device.alexaconnector.api.iml" filepath="$PROJECT_DIR$/component/api/org.wso2.carbon.device.alexaconnector.api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/feature/feature/org.wso2.carbon.device.alexaconnector.feature.iml" filepath="$PROJECT_DIR$/feature/feature/org.wso2.carbon.device.alexaconnector.feature.iml" />
+      <module fileurl="file://$PROJECT_DIR$/component/plugin/org.wso2.carbon.device.alexaconnector.plugin.iml" filepath="$PROJECT_DIR$/component/plugin/org.wso2.carbon.device.alexaconnector.plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/component/ui/org.wso2.carbon.device.alexaconnector.ui.iml" filepath="$PROJECT_DIR$/component/ui/org.wso2.carbon.device.alexaconnector.ui.iml" />
+    </modules>
+  </component>
+</project>
