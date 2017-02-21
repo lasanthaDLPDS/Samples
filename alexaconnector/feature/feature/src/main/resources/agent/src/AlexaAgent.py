@@ -313,25 +313,25 @@ def main():
 
     # Loop and poll for incoming Echo requests
     logging.debug("Entering fauxmo polling loop")
-    while True:
-
-        test(True,"light")
-        time.sleep(0.8)
-        test(False, "light")
-        time.sleep(0.9)
-        test(True, "buzzer")
-        time.sleep(0.8)
-
-        test(False, "buzzer")
-        time.sleep(0.8)
     # while True:
-    #     try:
-    #         # Allow time for a ctrl-c to stop the process
-    #         p.poll(100)
-    #         time.sleep(0.1)
-    #     except Exception, e:
-    #         logging.critical("Critical exception: " + str(e))
-    #         break
+    #
+    #     test(True,"light")
+    #     time.sleep(10)
+    #     test(False, "light")
+    #     time.sleep(10)
+    #     test(True, "buzzer")
+    #     time.sleep(10)
+    #
+    #     test(False, "buzzer")
+    #     time.sleep(10)
+    while True:
+        try:
+            # Allow time for a ctrl-c to stop the process
+            p.poll(100)
+            time.sleep(0.1)
+        except Exception, e:
+            logging.critical("Critical exception: " + str(e))
+            break
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

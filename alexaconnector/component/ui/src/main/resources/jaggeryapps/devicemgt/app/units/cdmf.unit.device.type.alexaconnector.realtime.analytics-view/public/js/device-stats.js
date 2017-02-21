@@ -17,16 +17,23 @@
  */
 
 var wsConnection1;
-var wsConnection2;
 var graphForSensorType1;
-var graphForSensorType2;
 var chartDataSensorType1 = [];
 var chartDataSensorType2 = [];
-var palette = new Rickshaw.Color.Palette({scheme: "classic9"});
-function drawGraph(wsConnection, placeHolder, yAxis, chat, chartData, graph) {
+var palette = new Rickshaw.Color.Palette();
+
+function getTime() {
     var tNow = new Date().getTime() / 1000;
+    return tNow;
+}
+function drawGraph(wsConnection, placeHolder, yAxis, chat, chartData,chartData2, graph) {
+    tNow = getTime();
     for (var i = 0; i < 30; i++) {
         chartData.push({
+            x: tNow - (30 - i) * 15,
+            y: parseFloat(0)
+        });
+        chartData2.push({
             x: tNow - (30 - i) * 15,
             y: parseFloat(0)
         });
@@ -37,13 +44,19 @@ function drawGraph(wsConnection, placeHolder, yAxis, chat, chartData, graph) {
         width: $(placeHolder).width() - 50,
         height: 300,
         renderer: "line",
+        interpolation: "linear",
         padding: {top: 0.2, left: 0.0, right: 0.0, bottom: 0.2},
         xScale: d3.time.scale(),
         series: [{
             'color': palette.color(),
             'data': chartData,
-            'name': "SensorValue"
-        }]
+            'name': "Light"
+        },
+            {
+                'color': palette.color(),
+                'data': chartData2,
+                'name': "Buzzer"
+            }]
     });
 
     graph.render();
@@ -65,29 +78,27 @@ function drawGraph(wsConnection, placeHolder, yAxis, chat, chartData, graph) {
     new Rickshaw.Graph.HoverDetail({
         graph: graph,
         formatter: function (series, x, y) {
-            var date = '<span class="date">' + moment.unix(x * 1000).format('Do MMM YYYY h:mm:ss a') + '</span>';
+            var date = '<span class="date">' + moment.unix(x).format('Do MMM YYYY h:mm:ss a') + '</span>';
             var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
             return swatch + series.name + ": " + parseInt(y) + '<br>' + date;
         }
     });
     var websocketurlStream = $(placeHolder).attr("data-websocketurlStream");
-    connect(wsConnection, websocketurlStream, chartData, graph);
+    connect(wsConnection, websocketurlStream, chartData,chartData2, graph);
 }
 
 $(window).load(function () {
-    drawGraph(wsConnection1, "#div-chart-sensorType1", "yAxisSensorType1", "chartSensorType1", chartDataSensorType1
-        , graphForSensorType1);
-    drawGraph(wsConnection2, "#div-chart-sensorType2", "yAxisSensorType2", "chartSensorType2", chartDataSensorType2
-        , graphForSensorType2);
+    drawGraph(wsConnection1, "#div-chart-sensorType1", "yAxisSensorType1", "chartSensorType1", chartDataSensorType1,
+        chartDataSensorType2, graphForSensorType1);
+
 });
 
 $(window).unload(function () {
     disconnect(wsConnection1);
-    disconnect(wsConnection2);
 });
 
 //websocket connection
-function connect(wsConnection, target, chartData, graph) {
+function connect(wsConnection, target, chartData,chartData2, graph) {
     if ('WebSocket' in window) {
         wsConnection = new WebSocket(target);
     } else if ('MozWebSocket' in window) {
@@ -96,14 +107,105 @@ function connect(wsConnection, target, chartData, graph) {
         console.log('WebSocket is not supported by this browser.');
     }
     if (wsConnection) {
+        var value1 = 0.0;
+        var value2 = 1.0;
+        var blValue=0.0;
+        var bzValue=0.0;
+        var blCommand = null;
+        var bzCommand
         wsConnection.onmessage = function (event) {
             var dataPoint = JSON.parse(event.data);
-            chartData.push({
-                x: parseInt(dataPoint[4]) / 1000,
-                y: parseFloat(dataPoint[5])
-            });
-            chartData.shift();
-            graph.update();
+            if (dataPoint[6] == "ON" && dataPoint[5] == "BULB") {
+
+                if (blCommand != dataPoint[6]) {
+                    chartData.push({
+                        x: parseInt(dataPoint[4]),
+                        y: parseFloat(value1)
+                    });
+
+                    chartData.shift();
+                    graph.update();
+
+                    chartData.push({
+                        x: parseInt(dataPoint[4]),
+                        y: parseFloat(value2)
+                    });
+
+                    chartData.shift();
+                    graph.update();
+
+                }
+                blCommand = dataPoint[6];
+
+            } else if(dataPoint[6] == "OFF" && dataPoint[5] == "BULB") {
+                if (blCommand != dataPoint[6]) {
+                    chartData.push({
+                        x: parseInt(dataPoint[4]),
+                        y: parseFloat(value2)
+                    });
+
+                    chartData.shift();
+                    graph.update();
+
+                    chartData.push({
+                        x: parseInt(dataPoint[4]),
+                        y: parseFloat(value1)
+                    });
+
+                    chartData.shift();
+                    graph.update();
+
+                }
+                blCommand = dataPoint[6];
+            }
+
+            if (dataPoint[6] == "ON" && dataPoint[5] == "BUZZER") {
+
+                if (bzCommand != dataPoint[6]) {
+
+                    chartData2.push({
+                        x: parseInt(dataPoint[4]),
+                        y: parseFloat(value1)
+                    });
+
+                    chartData2.shift();
+                    graph.update();
+
+                    chartData2.push({
+                        x: parseInt(dataPoint[4]),
+                        y: parseFloat(value2)
+                    });
+
+                    chartData2.shift();
+                    graph.update();
+
+                }
+                bzCommand = dataPoint[6];
+
+            } else if(dataPoint[6] == "OFF" && dataPoint[5] == "BUZZER") {
+                if (bzCommand != dataPoint[6]) {
+
+                    chartData2.push({
+                        x: parseInt(dataPoint[4]),
+                        y: parseFloat(value2)
+                    });
+
+                    chartData2.shift();
+                    graph.update();
+
+                    chartData2.push({
+                        x: parseInt(dataPoint[4]),
+                        y: parseFloat(value1)
+                    });
+
+                    chartData2.shift();
+                    graph.update();
+
+                }
+                bzCommand = dataPoint[6];
+            }
+
+
         };
     }
 }

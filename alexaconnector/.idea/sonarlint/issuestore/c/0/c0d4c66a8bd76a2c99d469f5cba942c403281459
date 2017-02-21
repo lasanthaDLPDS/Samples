@@ -1,23 +1,23 @@
 
-_squid:S2147"ECombine this catch with the one at line 231, which has the same body.(ËÓğÂûÿÿÿÿ
-_squid:S2147"ECombine this catch with the one at line 231, which has the same body.(Âœ»Ñÿÿÿÿÿ
-Tsquid:S1161":Add the "@Override" annotation above this method signature(ìùŞùÿÿÿÿ
-jsquid:UselessImportCheck"CRemove this unused import 'java.util.concurrent.ConcurrentHashMap'.(ÓŠÓøúÿÿÿÿ
-’squid:S1598"üThis file "DeviceTypeServiceImpl.java" should be located in "org/wso2/carbon/device/alexaconnector/api" directory, not in "/home/lasantha/Documents/IOTS_HOME/samples/alexaconnector/component/api/src/main/java/org.wso2.carbon.device/alexaconnector/api".(—›¸›
 Nsquid:UselessImportCheck",Remove this unused import 'javax.ws.rs.PUT'.(¦Ö±–
-Tsquid:S1161":Add the "@Override" annotation above this method signature(¯êæüúÿÿÿÿ
-:squid:S1166"%Either log or rethrow this exception.(¤á»è
+ssquid:S1488"_Immediately return this expression instead of assigning it to the temporary variable "zipFile".(Ï®Õ$
+Bsquid:S1481"-Remove this unused "deviceId" local variable.(Ñ•ê¶
+Zsquid:S2147"ECombine this catch with the one at line 224, which has the same body.(›–µö
+–squid:S1598"€This file "DeviceTypeServiceImpl.java" should be located in "org/wso2/carbon/device/alexaconnector/api" directory, not in "/home/lasantha/Documents/wso2iot-3.0.0/samples/alexaconnector/component/api/src/main/java/org.wso2.carbon.device/alexaconnector/api".(—›¸›
+Tsquid:S1161":Add the "@Override" annotation above this method signature(ìùŞùÿÿÿÿ
+Psquid:S2696"6Make the enclosing method "static" or remove this set.( Ó£˜øÿÿÿÿ
+Tsquid:S1161":Add the "@Override" annotation above this method signature(¨àÍŒıÿÿÿÿ
+Esquid:UselessImportCheck"Remove this duplicated import.(ÅÁöúüÿÿÿÿ
 O
 squid:S899";Do something with the "boolean" value returned by "delete".(Ä…¿¿
-rsquid:S1488"]Immediately return this expression instead of assigning it to the temporary variable "added".(œ–±ö
-Esquid:UselessImportCheck"Remove this duplicated import.(ÅÁöúüÿÿÿÿ
-?squid:S1166"%Either log or rethrow this exception.(«ÇÕúÿÿÿÿ
-Psquid:S2696"6Make the enclosing method "static" or remove this set.( Ó£˜øÿÿÿÿ
-Bsquid:S1481"-Remove this unused "deviceId" local variable.(Ñ•ê¶
-Zsquid:S2147"ECombine this catch with the one at line 231, which has the same body.(›–µö
-Zsquid:S2147"ECombine this catch with the one at line 231, which has the same body.(Ãôş•
-Tsquid:S1161":Add the "@Override" annotation above this method signature(¨àÍŒıÿÿÿÿ
-ssquid:S1488"_Immediately return this expression instead of assigning it to the temporary variable "zipFile".(Ï®Õ$
-Vsquid:UselessImportCheck"/Remove this unused import 'javax.ws.rs.DELETE'.(×ï‘«üÿÿÿÿ
-Qsquid:S1854"<Remove this useless assignment to local variable "deviceId".(Ñ•ê¶
 squid:UselessImportCheck"]Remove this unused import 'org.wso2.carbon.device.mgt.common.group.mgt.DeviceGroupConstants'.(êıœ·
+Tsquid:S1161":Add the "@Override" annotation above this method signature(¯êæüúÿÿÿÿ
+Qsquid:S1854"<Remove this useless assignment to local variable "deviceId".(Ñ•ê¶
+_squid:S2147"ECombine this catch with the one at line 224, which has the same body.(Âœ»Ñÿÿÿÿÿ
+Vsquid:UselessImportCheck"/Remove this unused import 'javax.ws.rs.DELETE'.(×ï‘«üÿÿÿÿ
+_squid:S2147"ECombine this catch with the one at line 224, which has the same body.(ËÓğÂûÿÿÿÿ
+?squid:S1166"%Either log or rethrow this exception.(«ÇÕúÿÿÿÿ
+:squid:S1166"%Either log or rethrow this exception.(¤á»è
+rsquid:S1488"]Immediately return this expression instead of assigning it to the temporary variable "added".(œ–±ö
+Zsquid:S2147"ECombine this catch with the one at line 224, which has the same body.(Ãôş•
+jsquid:UselessImportCheck"CRemove this unused import 'java.util.concurrent.ConcurrentHashMap'.(ÓŠÓøúÿÿÿÿ
