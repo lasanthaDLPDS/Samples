@@ -109,10 +109,8 @@ function connect(wsConnection, target, chartData,chartData2, graph) {
     if (wsConnection) {
         var value1 = 0.0;
         var value2 = 1.0;
-        var blValue=0.0;
-        var bzValue=0.0;
         var blCommand = null;
-        var bzCommand
+        var bzCommand;
         wsConnection.onmessage = function (event) {
             var dataPoint = JSON.parse(event.data);
             if (dataPoint[6] == "ON" && dataPoint[5] == "BULB") {
