@@ -76,18 +76,6 @@ if args.log:
 if args.interval:
     PUSH_INTERVAL = args.interval
 
-
-# if args.mode:
-#     running_mode.RUNNING_MODE = args.mode
-#     iotUtils = __import__('iotUtils')
-#     mqttConnector = __import__('mqttConnector')
-#     # httpServer = __import__('httpServer') # python script used to start a http-server to listen for operations
-#     # (includes the TEMPERATURE global variable)
-#
-#     if running_mode.RUNNING_MODE == 'N':
-#         Adafruit_DHT = __import__('Adafruit_DHT')  # Adafruit library required for temperature sensing
-
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #       A class we can use to capture stdout and sterr in the log
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -136,46 +124,6 @@ def connectAndPushData(command, state):
     print ('PUBLISHED DATA: ' + PUSH_DATA)
     print ('PUBLISHED TOPIC: ' + mqttConnector.TOPIC_TO_PUBLISH)
     mqttConnector.publish(mqttConnector.TOPIC_TO_PUBLISH, PUSH_DATA)
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#       This is a Thread object for reading temperature continuously
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# class CommandReaderThread(object):
-#     def __init__(self):
-#         if running_mode.RUNNING_MODE == 'N':
-#             self.interval = iotUtils.COMMANDS_READING_INTERVAL_REAL_MODE
-#         else:
-#             self.interval = iotUtils.COMMANDS_READING_INTERVAL_VIRTUAL_MODE
-#         thread = threading.Thread(target=self.run, args=())
-#         thread.daemon = True  # Daemonize thread
-#         thread.start()  # Start the execution
-#
-#     def run(self):
-#
-#         # Try to grab a sensor reading.  Use the read_retry method which will retry up
-#         # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
-#         while True:
-#             try:
-#                 if running_mode.RUNNING_MODE == 'N':
-#
-#                 else:
-#                     light_on, light_off, buzzer_on, buzzer_off  = iotUtils.generateRandomTemperatureAndHumidityValues(4)
-#
-#                 # this part shoild be correct
-#                 if light_on != iotUtils.LAST_TEMP:
-#                     time.sleep(PUSH_INTERVAL)
-#                     iotUtils.LAST_TEMP = light_on
-#                     connectAndPushData()
-#
-#                 iotUtils.LAST_TEMP = light_on
-#                 # print 'RASPBERRY_STATS: Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity)
-#
-#             except Exception, e:
-#                 print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-#                 print "RASPBERRY_STATS: Exception in TempReaderThread: Could not successfully read Temperature"
-#                 print ("RASPBERRY_STATS: " + str(e))
-#                 pass
-#                 time.sleep(self.interval)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #       This is a Thread object for listening for MQTT Messages
@@ -313,6 +261,12 @@ def main():
 
     # Loop and poll for incoming Echo requests
     logging.debug("Entering fauxmo polling loop")
+    
+    # **********************************************************************
+    # After installing agent into device consider about folowing commwnts
+    # *********************************************************************
+
+    # comment from ################################################################
     while True:
     
         test(True,"light")
@@ -324,7 +278,10 @@ def main():
     
         test(False, "buzzer")
         time.sleep(10)
-    #while True:
+    # to #############################################################################
+
+    # uncomment from  ##################################################################
+    # while True:
     #    try:
     #        # Allow time for a ctrl-c to stop the process
     #        p.poll(100)
@@ -332,7 +289,7 @@ def main():
     #    except Exception, e:
     #        logging.critical("Critical exception: " + str(e))
     #        break
-
+    # to ###############################################################################
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 if __name__ == "__main__":
