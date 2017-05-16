@@ -75,6 +75,11 @@ function drawGraph(wsConnection, placeHolder, yAxis, chat, chartData,chartData2,
         element: document.getElementById(yAxis)
     });
 
+    new Rickshaw.Graph.Legend( {
+        element: document.querySelector('#legend'),
+        graph: graph
+    } );
+
     new Rickshaw.Graph.HoverDetail({
         graph: graph,
         formatter: function (series, x, y) {

@@ -33,8 +33,7 @@ public class DeviceTypeConstants {
     public final static String STATE_OFF = "OFF";
 
     //sensor events summerized table name
-    public static final String SENSOR_TYPE1_EVENT_TABLE = "ORG_WSO2_IOT_DEVICES_alexa";
-    public static final String SENSOR_TYPE2_EVENT_TABLE = "ORG_WSO2_IOT_DEVICES_alexa1";
+    public static final String SENSOR_TYPE1_EVENT_TABLE = "ORG_WSO2_IOT_DEVICES_ALEXA";
     public static final String DATA_SOURCE_NAME = "jdbc/alexaconnectorDM_DB";
     public final static String DEVICE_TYPE_PROVIDER_DOMAIN = "carbon.super";
     public final static String SENSOR_TYPE1 = "alexa";

@@ -196,6 +196,9 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
         } catch (DeviceAccessAuthorizationException e) {
             log.error(e.getErrorMessage(), e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 
